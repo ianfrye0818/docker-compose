@@ -1,0 +1,49 @@
+---
+services:
+  plex:
+    image: linuxserver/plex
+    container_name: plex
+    env_file: .env
+    networks:
+      default-main:
+      media:
+        ipv4_address: ${PLEX_IPV4_ADDRESS}
+    ports:
+      - ${PLEX_UI_PORT}:32400/tcp
+      - ${PLEX_MEDIA_PORT2}:8324/tcp
+      - ${PLEX_MEDIA_PORT3}:32469/tcp
+      - ${PLEX_MEDIA_PORT4}:1900/udp
+      - ${PLEX_MEDIA_PORT5}:32410/udp
+      - ${PLEX_MEDIA_PORT6}:32412/udp
+      - ${PLEX_MEDIA_PORT7}:32413/udp
+      - ${PLEX_MEDIA_PORT8}:32414/udp
+
+      # devices:
+      #   #- /dev/dvb:/dev/dvb # Uncomment this device for typical USB TV Tuner cards
+      # - /dev/dri:/dev/dri # Uncomment this to use intel GPUs for Hardware Transcoding
+    environment:
+      PUID: ${STANDARD_USER}
+      PGID: ${STANDARD_GROUP}
+      TZ: ${TIME_ZONE}
+      # Uncomment the lines below to use Nvidia GPUs for Hardware Transcoding
+      #NVIDIA_VISIBLE_DEVICES: all
+      #NVIDIA_DRIVER_CAPABILITIES: all
+    volumes:
+      - /etc/localtime:/etc/localtime:ro # Sync the container's time to the host's time
+      - ${PLEX_CONFIG_VOLUME}:/config
+      - ${PLX_MEDIA_VOLUME}:/plx
+    restart: ${RESTART_POLICY}
+    # Uncomment the lines below to use Nvidia GPUs for Hardware Transcoding
+    #deploy:
+    #  resources:
+    #    reservations:
+    #      devices:
+    #        - driver: nvidia
+    #          count: 1
+    #          capabilities: [gpu]
+
+networks:
+  media:
+    external: true
+  default-main:
+    external: true

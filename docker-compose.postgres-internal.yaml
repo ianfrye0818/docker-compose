@@ -1,0 +1,22 @@
+---
+services:
+  db:
+    env_file: .env
+    image: postgres
+    container_name: postgres-internal
+    restart: unless-stopped
+    volumes:
+      - ${POSTGRES_DATA_VOLUME}:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      TZ: ${TIME_ZONE}
+    networks:
+      default-main:
+    ports:
+      - ${POSTGRES_PORT}:5432
+
+networks:
+  default-main:
+    external: true

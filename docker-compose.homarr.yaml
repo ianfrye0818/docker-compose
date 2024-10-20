@@ -1,0 +1,24 @@
+---
+services:
+  homarr:
+    container_name: homarr
+    image: ghcr.io/ajnart/homarr:latest
+    restart: ${RESTART_POLICY}
+    env_file: .env
+    environment:
+      TZ: ${TIME_ZONE}
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ${HOMARR_CONFIG_VOLUME}:/app/data/configs
+      - ${HOMARR_ICONS_VOLUME}:/app/public/icons
+      - ${HOMARR_DATA_VOLUME}:/data
+    ports:
+      - ${HOMARR_UI_PORT}:7575
+    networks:
+      lan-br0:
+        ipv4_address: ${HOMARR_IPV4_ADDRESS}
+
+
+networks:
+  lan-br0:
+    external: true

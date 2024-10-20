@@ -1,0 +1,24 @@
+services:
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    env_file: .env
+    environment:
+      PUID: ${STANDARD_USER}
+      PGID: ${STANDARD_GROUP}
+      TZ: ${TIMEZONE}
+    volumes:
+      - ${TAUTULLI_CONFIG_VOLUME}:/config
+    ports:
+      - ${TAUTULLI_UI_PORT}:8181
+    restart: ${RESTART_POLICY}
+    networks:
+      default-main:
+      media:
+        ipv4_address: ${TAUTULLI_IPV4_ADDRESS}
+
+networks:
+  default-main:
+    external: true
+  media:
+    external: true

@@ -1,0 +1,27 @@
+---
+services:
+  readarr:
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    env_file: .env
+    environment:
+      PUID: ${STANDARD_USER}
+      PGID: ${STANDARD_GROUP}
+      TZ: ${TIME_ZONE}
+    volumes:
+      - /docker/appdata/readarr/config:/config
+      - ${READARR_BOOKS_PATH}:/books
+      - ${DOWNLOAD_VOLUME}:/downloads 
+    networks:
+      default-main:
+      media:
+        ipv4_address: ${READARR_IPV4_ADDRESS}
+    ports:
+      - ${READARR_UI_PORT}:8787
+    restart: ${RESTART_POLICY}
+
+networks:
+  default-main:
+    external: true
+  media:
+    external: true

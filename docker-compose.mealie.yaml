@@ -1,0 +1,40 @@
+---
+services:
+  mealie:
+    image: ghcr.io/mealie-recipes/mealie:v1.12.0
+    env_file: .env
+    container_name: mealie
+    restart: ${RESTART_POLICY}
+    networks:
+      - default-main
+    ports:
+        - ${MEALIE_UI_PORT}:9000
+    deploy:
+      resources:
+        limits:
+          memory: 1000M
+    volumes:
+      - ${MEALIE_DATA_VOLUME}:/app/data/
+    environment:
+      ALLOW_SIGNUP: "true"
+      PUID: ${STANDARD_USER}
+      PGID: ${STANDARD_GROUP}
+      TZ: ${TIME_ZONE}
+      MAX_WORKERS: 1
+      WEB_CONCURRENCY: 1
+      BASE_URL: ${BASE_URL}
+      SMTP_HOST: ${SMTP_HOST}
+      SMTP_PORT: ${SMTP_PORT}
+      SMTP_FROM_NAME: ${SMTP_FROM_NAME}
+      SMTP_AUTH_STRATEGY: ${SMTP_AUTH_STRATEGY}
+      SMTP_FROM_EMAIL: ${SMTP_FROM_EMAIL}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASSWORD: ${SMTP_PASSWORD}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+
+volumes:
+  mealie-data:
+
+networks:
+  default-main:
+    external: true

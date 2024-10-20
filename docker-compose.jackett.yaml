@@ -1,0 +1,23 @@
+---
+services:
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    env_file: .env
+    environment:
+      PUID: ${STANDARD_USER}
+      PGID: ${STANDARD_GROUP}
+      TZ: ${TIME_ZONE}
+      AUTO_UPDATE: true
+    volumes:
+      - ${JACKET_CONFIG_VOLUME}:/config
+      - ${DOWNLOAD_VOLUME}:/downloads
+    networks:
+      - default-main
+    ports:
+      - ${JACKET_UI_PORT}:9117
+    restart: ${RESTART_POLICY}
+
+networks:
+  default-main:
+    external: true

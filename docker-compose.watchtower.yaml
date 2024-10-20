@@ -1,0 +1,22 @@
+---
+services:
+  watchtower:
+    container_name: watchtower
+    image: containrrr/watchtower
+    volumes:
+      - ${DOCKER_SOCK_VOLUME}:/var/run/docker.sock
+    privileged: true
+    env_file: .env
+    environment:
+      WATCHTOWER_POLL_INTERVAL: ${WATCHTOWER_POLL_INTERVAL}
+      WATCHTOWER_ROLLING_RESTART: ${WATCHTOWER_ROLLING_RESTART}
+      TZ: ${TIME_ZONE}
+      PUID: ${ROOT_USER}
+      PGID: ${ROOT_GROUP}
+    restart: ${RESTART_POLICY}
+    networks:
+      default-main:
+
+networks:
+  default-main:
+    external: true

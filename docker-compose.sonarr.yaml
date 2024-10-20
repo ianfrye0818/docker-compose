@@ -1,0 +1,26 @@
+services:
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    env_file: .env
+    environment:
+      PUID: ${STANDARD_USER}
+      PGID: ${STANDARD_GROUP
+      TZ: ${TIME_ZONE}
+    volumes:
+      - ${SONAR_CONFIG_VOLUME}:/config
+      - ${PLX_MEDIA_VOLUME}:/plx #optional
+      - ${DOWNLOAD_VOLUME}:/downloads #optional
+    networks:
+      default-main:
+      media:
+        ipv4_address: ${SONARR_IPV4_ADDRESS}
+    ports:
+      - ${SONARR_UI_PORT}:8989
+    restart: ${RESTART_POLICY}
+
+networks:
+  default-main:
+    external: true
+  media:
+    external: true

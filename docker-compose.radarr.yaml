@@ -1,0 +1,26 @@
+services:
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    env_file: .env
+    environment:
+      PUID: ${STANDARD_USER}
+      PGID: ${STANDARD_GROUP}
+      TZ: ${TIME_ZONE}
+    volumes:
+      - ${RADARR_CONFIG_VOLUME}:/config
+      - ${PLX_MEDIA_VOLUME}:/plx
+      - ${DOWNLOAD_VOLUME}:/downloads
+    networks:
+      default-main:
+      media:
+        ipv4_address: ${RADARR_IPV4_ADDRESS}
+    ports:
+      - ${RADARR_UI_PORT}:7878
+    restart: ${RESTART_POLICY}
+
+networks:
+  default-main:
+    external: true
+  media:
+    external: true

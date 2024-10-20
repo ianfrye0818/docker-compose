@@ -1,0 +1,18 @@
+services:
+  mongo-db:
+      image: docker.io/mongo:4.4
+      container_name: mongo-db4_4
+      env_file: .env
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+        MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+        MONGO_DBNAME: ${MONGO_DBNAME}
+        MONGO_AUTHSOURCE: ${MONGO_AUTHSOURCE}
+        TZ: ${TIME_ZONE}
+      volumes:
+        - ${MONGO_DATA_VOLUME}:/data/db
+      restart: ${RESTART_POLICY}
+      networks:
+        - default-main
+      ports:
+        - ${MONGO_DB_PORT}:27017

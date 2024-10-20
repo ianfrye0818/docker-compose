@@ -1,0 +1,46 @@
+---
+services:
+  qbittorrentvpn:
+    image: binhex/arch-qbittorrentvpn
+    container_name: binhex-qbit
+    env_file: .env
+    cap_add:
+      - NET_ADMIN
+    networks:
+      - default-main
+      - media
+    ports:
+      - ${QBIT_UI_PORT}:8080
+      - ${QBIT_DATA_PORT1}:8118
+      - ${QBIT_DATA_PORT2}:9118
+      - ${QBIT_DATA_PORT3}:58946
+    volumes:
+      - ${DOWNLOAD_VOLUME}:/downloads
+      - ${QBIT_CONFIG_VOLUME}:/config
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - VPN_ENABLED=yes
+      - VPN_USER=${QBIT_VPN_USER}
+      - VPN_PASS=${QBIT_VPN_PASSWORD}
+      - VPN_PROV=${QBIT_VPN_PROV}
+      - VPN_CLIENT=${QBIT_VPN_CLIENT}
+      - ENABLE_STARTUP_SCRIPTS=no
+      - ENABLE_PRIVOXY=yes
+      - STRICT_PORT_FORWARD=yes
+      - USERSPACE_WIREGUARD=no
+      - ENABLE_SOCKS=yes
+      - SOCKS_USER=admin
+      - SOCKS_PASS=socks
+      - LAN_NETWORK=${QBIT_LAN_NETWORK}
+      - NAME_SERVERS=${QBIT_NAME_SERVERS}
+      - VPN_INPUT_PORTS=1234
+      - VPN_OUTPUT_PORTS=5678
+      - DEBUG=false
+      - WEBUI_PORT=${QBIT_UI_PORT}
+      - INCOMPING_PORT_ENV=8999
+      - WEBUI_PORT_ENV=80
+      - UMASK=000
+      - PUID=${STANDARD_USER}
+      - PGID=${STANDARD_GROUP}
+      - TZ=${TIME_ZONE}
+    restart: ${RESTART_POLICY}

@@ -1,0 +1,38 @@
+---
+services:
+  unifi-network-application:
+    image: lscr.io/linuxserver/unifi-network-application:latest
+    container_name: unifi-network-application
+    env_file: .env
+    environment:
+      PUID: ${STANDARD_USER}
+      PGID: ${STANDARD_GROUP}
+      TZ: ${TIME_ZONE}
+      MONGO_USER: ${MONGO_USER}
+      MONGO_PASS: ${MONGO_PASS}
+      MONGO_HOST: ${MONGO_HOST}
+      MONGO_PORT: ${MONGO_PORT}
+      MONGO_DBNAME: ${MONGO_DBNAME}
+      MONGO_AUTHSOURCE: ${MONGO_AUTHSOURCE}
+      MEM_LIMIT: ${MEM_LIMIT}
+      MEM_STARTUP: ${MEM_STARTUP}
+    networks:
+      default-main:
+      br0:
+        ipv4_address: ${UNIFI_IPV4_ADDRESS}
+    volumes:
+      - ${UNIFI_DATA_VOLUME}:/config
+    ports:
+      - ${UNIFI_UI_PORT}:8443
+      - ${UNIFI_MGMT_PORT1}:3478/udp
+      - ${UNIFI_MGMT_PORT2}:10001/udp
+      - ${UNIFI_MGMT_PORT3}:1900/udp
+      - ${UNIFI_MGMT_PORT4}:6789/tcp
+      - ${UNIFI_MGMT_PORT5}:8080/tcp
+    restart: ${RESTART_POLICY}
+
+networks:
+  default-main:
+    external: true
+  br0:
+    external: true
